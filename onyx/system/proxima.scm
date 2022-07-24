@@ -47,11 +47,13 @@
   (packages
     (append
       (map specification->package
-	   '("nss-certs" "zsh" "tmux" "git" "vim" "vim-scheme"))
+	   '("nss-certs" "zsh" "tmux" "git" "vim"))
       %base-packages))
 
   (services
     (append
       (list (service openssh-service-type)
 	    (service dhcp-client-service-type))
-      %base-services)))
+      (modify-services %base-services
+		       (console-font-service-type config =>
+						  `(("tty1" . ,(file-append (specification->package "font-terminus") "/share/consolefonts/ter-114b"))))))))
